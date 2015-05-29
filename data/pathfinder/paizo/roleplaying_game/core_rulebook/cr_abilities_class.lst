@@ -8,7 +8,27 @@ SOURCELONG:Core Rulebook	SOURCESHORT:CR	SOURCEWEB:http://paizo.com/store/downloa
 
 #					Ability Pool
 # Ability Name			Define											Bonus Ability Pool
-CATEGORY=Internal|Default.MOD	DEFINE:Divine_Bond_Mount|0	DEFINE:Hunters_Bond_Animal_Companion|0	BONUS:ABILITYPOOL|Favored Class|1|PREPCLEVEL:MIN=1
+CATEGORY=Internal|Default.MOD	DEFINE:Divine_Bond_Mount|0	DEFINE:Hunters_Bond_Animal_Companion|0	BONUS:ABILITYPOOL|Favored Class|1|PREPCLEVEL:MIN=1	
+# Keep defines for Caster level in one location for easier modification - for classes outside the core, the DEFINES will be with their classes. 
+# Due to a Code Bug, had to use BL_Stripped_Class to make this system work consistently.
+# Core Rule Book
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_Bard|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_Cleric|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_Druid|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_Paladin|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_Ranger|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_Sorcerer|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_Wizard|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_Adept|0
+
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_BL_Stripped_Bard|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_BL_Stripped_Cleric|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_BL_Stripped_Druid|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_BL_Stripped_Paladin|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_BL_Stripped_Ranger|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_BL_Stripped_Sorcerer|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_BL_Stripped_Wizard|0
+CATEGORY=Internal|Default.MOD	DEFINE:Caster_Level_BL_Stripped_Adept|0
 
 ###Block: Favored Classes
 # Ability Name	Category of Ability		Type			Visible		Stackable?	Multiple?	Bonus Ability Pool
@@ -1138,16 +1158,15 @@ Feat			KEY:Rogue Talent ~ Feat				CATEGORY:Special Ability	TYPE:RogueAdvancedTal
 ###Block: Sorcerer Abilities ---------------------------------------------------------------------------------------------------------------
 # Ability Name		Unique Key					Category of Ability		Type									Visible	Define																								Description																										Ability						Bonus Ability Pool				Modify VAR																							Source Page
 Cantrips			KEY:Sorcerer ~ Cantrips			CATEGORY:Special Ability	TYPE:SorcererClassFeatures.SpecialQuality																														DESC:You learn a number of cantrips, or 0-level spells. These spells are cast like any other spells, but they do not consume any slots and may be used again.																																							SOURCEPAGE:p.71
-Sorcerer Bloodline	KEY:Sorcerer ~ Sorcerer Bloodline	CATEGORY:Special Ability	TYPE:SorcererClassFeatures.Internal.ClassFeatures	VISIBLE:NO	DEFINE:BloodlineLVL|0	DEFINE:BloodlineCasterLVL|0	DEFINE:BloodlinePowerTimes|0	DEFINE:BloodlineFeatProgression|0	DEFINE:BloodlineFeatCount|0																																			BONUS:ABILITYPOOL|Sorcerer Bloodline|1	BONUS:VAR|BloodlineFeatCount|(BloodlineFeatProgression-1)/6	BONUS:VAR|BloodlineFeatProgression|BloodlineLVL	BONUS:VAR|BloodlinePowerTimes|3+CHA	SOURCEPAGE:p.71
+Sorcerer Bloodline	KEY:Sorcerer ~ Sorcerer Bloodline	CATEGORY:Special Ability	TYPE:SorcererClassFeatures.Internal.ClassFeatures	VISIBLE:NO	DEFINE:BloodlineLVL|0	DEFINE:BloodlineCasterLVL|0	DEFINE:BloodlinePowerTimes|0	DEFINE:BloodlineFeatProgression|0	DEFINE:BloodlineFeatCount|0																																			BONUS:ABILITYPOOL|Sorcerer Bloodline|1		BONUS:VAR|BloodlinePowerTimes|3+CHA	SOURCEPAGE:p.71
 #
 Eschew Materials		KEY:Sorcerer ~ Eschew Materials	CATEGORY:Special Ability	TYPE:SorcererClassFeatures.Internal																																																										ABILITY:FEAT|AUTOMATIC|Eschew Materials
 
-###Block: Make sure Bonus Spell Doesn't take from a Known Spell Slot
-# Ability Name						Bonus to spell known/L
-#CATEGORY=Special Ability|Sorcerer Bloodline.MOD	BONUS:SPELLKNOWN|CLASS=Sorcerer;LEVEL=1|1|PREVARGTEQ:BloodlineCasterLVL,3
-#CATEGORY=Special Ability|Sorcerer Bloodline.MOD	BONUS:SPELLKNOWN|CLASS=Sorcerer;LEVEL=2|1|PREVARGTEQ:BloodlineCasterLVL,5
-#CATEGORY=Special Ability|Sorcerer Bloodline.MOD	BONUS:SPELLKNOWN|CLASS=Sorcerer;LEVEL=3|1|PREVARGTEQ:BloodlineCasterLVL,7
-#CATEGORY=Special Ability|Sorcerer Bloodline.MOD	BONUS:SPELLKNOWN|CLASS=Sorcerer;LEVEL=4|1|PREVARGTEQ:BloodlineCasterLVL,9
+###Block: 
+CATEGORY=Special Ability|Sorcerer ~ Sorcerer Bloodline.MOD	BONUS:VAR|BloodlineFeatCount|(BloodlineFeatProgression-1)/6	BONUS:VAR|BloodlineFeatProgression|BloodlineLVL|PREABILITY:1,CATEGORY=Archetype,TYPE.SorcererBloodlineFeats
+CATEGORY=Special Ability|Sorcerer ~ Sorcerer Bloodline.MOD	BONUS:VAR|BloodlineFeatCount|-1|PREVARGTEQ:BloodlineFeatProgression,7|PREABILITY:1,CATEGORY=Archetype,TYPE.SorcererBloodlineFeat7
+CATEGORY=Special Ability|Sorcerer ~ Sorcerer Bloodline.MOD	BONUS:VAR|BloodlineFeatCount|-1|PREVARGTEQ:BloodlineFeatProgression,13|PREABILITY:1,CATEGORY=Archetype,TYPE.SorcererBloodlineFeat13
+CATEGORY=Special Ability|Sorcerer ~ Sorcerer Bloodline.MOD	BONUS:VAR|BloodlineFeatCount|-1|PREVARGTEQ:BloodlineFeatProgression,19|PREABILITY:1,CATEGORY=Archetype,TYPE.SorcererBloodlineFeat19
 #CATEGORY=Special Ability|Sorcerer Bloodline.MOD	BONUS:SPELLKNOWN|CLASS=Sorcerer;LEVEL=5|1|PREVARGTEQ:BloodlineCasterLVL,11
 #CATEGORY=Special Ability|Sorcerer Bloodline.MOD	BONUS:SPELLKNOWN|CLASS=Sorcerer;LEVEL=6|1|PREVARGTEQ:BloodlineCasterLVL,13
 #CATEGORY=Special Ability|Sorcerer Bloodline.MOD	BONUS:SPELLKNOWN|CLASS=Sorcerer;LEVEL=7|1|PREVARGTEQ:BloodlineCasterLVL,15
@@ -1495,7 +1514,7 @@ Archetype Cleric					CATEGORY:Archetype	TYPE:ClericArchetype	VISIBLE:NO
 
 # COMMENT: Post 6.0 Change
 # Ability Name					Category of Ability	Type				Visible	Define																							Auto Equip						Ability																																										Modify VAR									Cost
-CATEGORY=Internal|Default.MOD													DEFINE:UncannyDodgeLVL|0																											ABILITY:Natural Attack|AUTOMATIC|Touch Attack (Ray)|PRECLASS:1,SPELLCASTER=1|PRESPELLTYPE:1,Ray=1	ABILITY:Internal|AUTOMATIC|Weapon Prof ~ Auto|PRECLASS:1,TYPE.PC=1	ABILITY:Special Ability|AUTOMATIC|Uncanny Dodge ~ Base|PREVARGTEQ:UncannyDodgeLVL,1
+CATEGORY=Internal|Default.MOD													DEFINE:UncannyDodgeLVL|0																											ABILITY:Natural Attack|AUTOMATIC|Touch Attack (Ray)|PREMULT:1,[PRECLASS:1,SPELLCASTER=1],[PREVARGTEQ:CasterLevel_Highest,1]|PRESPELLTYPE:1,Ray=1	ABILITY:Internal|AUTOMATIC|Weapon Prof ~ Auto|PRECLASS:1,TYPE.PC=1	ABILITY:Special Ability|AUTOMATIC|Uncanny Dodge ~ Base|PREVARGTEQ:UncannyDodgeLVL,1
 #CATEGORY=Internal|Default.MOD	ABILITY:Natural Attack|AUTOMATIC|Blank Weapon Block OS
 
 ###Block: Natural Attack Replacements
