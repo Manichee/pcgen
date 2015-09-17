@@ -51,9 +51,10 @@ import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.Constants;
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.enumeration.ObjectKey;
-import pcgen.cdom.enumeration.StringKey;
+import pcgen.cdom.enumeration.PCStringKey;
 import pcgen.core.AbilityCategory;
 import pcgen.core.Equipment;
+import pcgen.core.GameMode;
 import pcgen.core.Globals;
 import pcgen.core.PCClass;
 import pcgen.core.PCTemplate;
@@ -334,12 +335,16 @@ public final class ExportHandler
 			cfg.setSharedVariable("loop", new LoopDirective());
 			cfg.setSharedVariable("equipsetloop", new EquipSetLoopDirective(aPC));
 
+			GameMode gamemode = SettingsHandler.getGame();
 			// data-model
 			Map<String, Object> pc = OutputDB.buildDataModel(aPC.getCharID());
+			Map<String, Object> mode = OutputDB.buildModeDataModel(gamemode);
 			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("pcgen", OutputDB.getGlobal());
 			input.put("pc", ObjectWrapper.DEFAULT_WRAPPER.wrap(pc));
-			input.put("gamemodename", SettingsHandler.getGame().getName());
-			
+			input.put("gamemode", mode);
+			input.put("gamemodename", gamemode.getName());
+
 			// Process the template
 			template.process(input, outputWriter);
 		}
@@ -2451,7 +2456,7 @@ public final class ExportHandler
 		// Filter out RESIDENCE
 		if ("RESIDENCE".equals(aString.substring(1)))
 		{
-			String residence = aPC.getSafeStringFor(StringKey.RESIDENCE);
+			String residence = aPC.getSafeStringFor(PCStringKey.RESIDENCE);
 			if (residence.equals(Constants.NONE))
 			{
 				canWrite = false;
@@ -2541,11 +2546,11 @@ public final class ExportHandler
 		// Filter out MISC.FUNDS
 		if ("MISC.FUNDS".equals(aString.substring(1)))
 		{
-			if (aPC.getSafeStringFor(StringKey.MISC_ASSETS).equals(Constants.NONE))
+			if (aPC.getSafeStringFor(PCStringKey.ASSETS).equals(Constants.NONE))
 			{
 				canWrite = false;
 			}
-			else if ((aPC.getSafeStringFor(StringKey.MISC_ASSETS)).trim().length() == 0)
+			else if ((aPC.getSafeStringFor(PCStringKey.ASSETS)).trim().length() == 0)
 			{
 				canWrite = false;
 			}
@@ -2556,11 +2561,11 @@ public final class ExportHandler
 		if ("COMPANIONS".equals(aString.substring(1))
 			|| "MISC.COMPANIONS".equals(aString.substring(1)))
 		{
-			if (aPC.getSafeStringFor(StringKey.MISC_COMPANIONS).equals(Constants.NONE))
+			if (aPC.getSafeStringFor(PCStringKey.COMPANIONS).equals(Constants.NONE))
 			{
 				canWrite = false;
 			}
-			else if (aPC.getSafeStringFor(StringKey.MISC_COMPANIONS).trim().length() == 0)
+			else if (aPC.getSafeStringFor(PCStringKey.COMPANIONS).trim().length() == 0)
 			{
 				canWrite = false;
 			}
@@ -2570,11 +2575,11 @@ public final class ExportHandler
 		// Filter out MISC.MAGIC
 		if ("MISC.MAGIC".equals(aString.substring(1)))
 		{
-			if (aPC.getSafeStringFor(StringKey.MISC_MAGIC).equals(Constants.NONE))
+			if (aPC.getSafeStringFor(PCStringKey.MAGIC).equals(Constants.NONE))
 			{
 				canWrite = false;
 			}
-			else if (aPC.getSafeStringFor(StringKey.MISC_MAGIC).trim().length() == 0)
+			else if (aPC.getSafeStringFor(PCStringKey.MAGIC).trim().length() == 0)
 			{
 				canWrite = false;
 			}

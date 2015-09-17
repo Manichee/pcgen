@@ -227,9 +227,9 @@ $Date: 2014-06-12 11:36:12 +1000 (Thu, 12 Jun 2014) $
             <span class="font6" ><br />Hit Points</span></td>
           <td align="center" class="border9"><b>${pcstring('HP')}</b></td>
           <td align="center"><br /></td>
-          <td align="center" class="border9"><br /></td>
+          <td align="center" class="border9"><input type="text"/></td>
           <td align="center"><br /></td>
-          <td align="center" class="border9"><br /></td>
+          <td align="center" class="border9"><input type="text"/></td>
           <td align="center"><br /></td>
           <td align="center" class="border9"><b>&nbsp;${pcstring('DR')}&nbsp;</b></td>
           <td align="center"><br /></td>
@@ -269,15 +269,15 @@ ${pcstring('MOVE.${movement}.NAME')}&nbsp;${pcstring('MOVE.${movement}.RATE')}
             <font style="font-size:5pt" color="white"><br />Vitality</font></td>
           <td align="center" class="border9"><b>${pcstring('HP')}</b></td>
           <td align="center"><br /></td>
-          <td align="center" class="border9"><br /></td>
+          <td align="center" class="border9"><input type="text"/></td>
           <td align="center"><br /></td>
-          <td align="center" class="border9"><br /></td>
+          <td align="center" class="border9"><input type="text"/></td>
           <td align="center"><br /></td>
           <td align="center" bgcolor="black"><font style="font-size:9pt" color="white"><b>WP</b></span>
             <font style="font-size:5pt" color="white"><br />Wound Points</font></td>
           <td align="center" class="border9"><b>${pcstring('ALTHP')}</b></td>
           <td align="center"><br /></td>
-          <td align="center" class="border9"><br /></td>
+          <td align="center" class="border9"><input type="text"/></td>
           <td align="center"><br /></td>
           <td align="center" class="border9"><b>&nbsp;${pcstring('DR')}&nbsp;</b></td>
           <td align="center"><br /></td>
@@ -1669,6 +1669,38 @@ ${pcstring('ABILITYALL.Special Ability.VISIBLE.${specialAttack}.TYPE=SpecialAtta
    </table>
 </#if>
 <!-- STOP Special Attacks Table -->
+
+<!-- START Prestige Award Table -->
+<#if (pcvar('count("ABILITIES","CATEGORY=Special Ability","TYPE=Prestige Award Display","VISIBILITY=DEFAULT[or]VISIBILITY=OUTPUT_ONLY")') > 0)>
+   <table width="100%" cellspacing="0" cellpadding="2" summary="Prestige Award Table">
+    <tr>
+     <th bgcolor="black" align="center" colspan="2"><font color="white" style="font-size: small"><b>Prestige Awards</b></font></th>
+    </tr>
+<@loop from=0 to=pcvar('count("ABILITIES","CATEGORY=Special Ability","TYPE=Prestige Award Display","VISIBILITY=DEFAULT[or]VISIBILITY=OUTPUT_ONLY")-1') ; prestigeAward , prestigeAward_has_next>
+<#if (prestigeAward % 2 = 0)><tr bgcolor="#DDDDDD"><#else><tr bgcolor="white"></#if>
+     <td valign="top" class="font8"><b>
+<#assign typeOfAbility = pcstring("ABILITYALL.Special Ability.VISIBLE.${prestigeAward}.TYPE=Prestige Award Display.TYPE")?lower_case />
+<#if (pcstring("ABILITYALL.Special Ability.VISIBLE.${prestigeAward}.TYPE=Prestige Award Display.HASASPECT.Name") = "Y")>
+${pcstring('ABILITYALL.Special Ability.VISIBLE.${prestigeAward}.TYPE=Prestige Award Display.ASPECT.Name')}
+<@typeOfAbilitySuffix typeOfAbility=typeOfAbility />
+<#else>
+${pcstring('ABILITYALL.Special Ability.VISIBLE.${prestigeAward}.TYPE=Prestige Award Display')}
+<@typeOfAbilitySuffix typeOfAbility=typeOfAbility />
+</#if>
+</b>
+</td>
+<td class="font8" valign="top"	width="30%" align="right">[${pcstring('ABILITYALL.Special Ability.VISIBLE.${prestigeAward}.TYPE=Prestige Award Display.SOURCE')}]</td>
+<tr>
+<#if (prestigeAward % 2 = 0)><tr bgcolor="#DDDDDD"><#else><tr bgcolor="white"></#if>
+<td class="font8" valign="top"	align="indent" colspan="2">&#160;&#160;&#160;&#160;
+${pcstring('ABILITYALL.Special Ability.VISIBLE.${prestigeAward}.TYPE=Prestige Award Display.DESC')}</td>
+    </tr>
+</@loop>
+   </table>
+</#if>
+<!-- STOP Prestige Award Table -->
+
+
 <!-- Start Animal Tricks -->
 <#if (pcvar('count("ABILITIES","CATEGORY=Special Ability","VISIBILITY=DEFAULT[or]VISIBILITY=OUTPUT_ONLY","TYPE=AnimalTrick")') = 0)>
 <#else>
