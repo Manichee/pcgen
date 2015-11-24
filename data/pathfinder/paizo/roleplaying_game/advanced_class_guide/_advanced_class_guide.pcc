@@ -8,7 +8,7 @@ RANK:1
 GENRE:Fantasy
 BOOKTYPE:Supplement
 SETTING:Pathfinder
-PRECAMPAIGN:1,INCLUDESBOOKTYPE=Core Rules
+PRECAMPAIGN:1,BOOKTYPE=Core Rules
 PRECAMPAIGN:4,INCLUDES=Advanced Player's Guide,INCLUDES=Ultimate Magic,INCLUDES=Ultimate Combat,INCLUDES=Ultimate Equipment
 PUBNAMELONG:Paizo Inc.
 PUBNAMESHORT:Paizo
@@ -58,6 +58,9 @@ SKILL:acg_skills.lst
 SPELL:acg_spells.lst
 TEMPLATE:acg_templates.lst
 COMPANIONMOD:acg_companionmods.lst
+
+
+ABILITY:support/acg_abilities_arg.lst|PRECAMPAIGN:1,INCLUDES=Advanced Race Guide
 
 #Spells from ARG
 
