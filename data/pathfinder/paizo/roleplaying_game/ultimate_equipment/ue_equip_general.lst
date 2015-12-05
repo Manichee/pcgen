@@ -244,7 +244,7 @@ Road Toll				TYPE:Service		COST:0.01	SOURCEPAGE:p.99
 Gate Toll				TYPE:Service		COST:0.01	SOURCEPAGE:p.99
 Scribe (Text)			TYPE:Service		COST:1	SOURCEPAGE:p.99
 Scribe (Map)			TYPE:Service		COST:10	SOURCEPAGE:p.99
-#Spellcasting		caster level x spell level × 10 gp		SOURCEPAGE:p.99
+#Spellcasting		caster level x spell level x 10 gp		SOURCEPAGE:p.99
 Valet (Per Day)			TYPE:Service		COST:1	SOURCEPAGE:p.99
 
 ###Block: Tools and Skill Kits
@@ -471,7 +471,7 @@ False-Bottomed Chest															TYPE:Goods.General															COST:52	WT:2
 False-Bottomed Cup															TYPE:Goods.General															COST:1						SOURCEPAGE:p.64
 False-Bottomed Scabbard															TYPE:Goods.General															COST:45	WT:1					SOURCEPAGE:p.64
 Familiar Satchel																TYPE:Goods.General															COST:25	WT:6					SOURCEPAGE:p.64																																																				SPROP:Provides total cover to any Tiny or smaller creature contained within it.
-Filter Hood																	TYPE:Goods.Tools.Headgear.Resizable													COST:10	WT:4					SOURCEPAGE:p.64																						BONUS:SKILL|Perception|-2																										SPROP:This snug leather hood has built-in goggles and a filtration tube containing sponges. A filter hood uses your helm slot and imposes a -2 penalty on hearing- and sight-based Perception checks. While the sponges are moist, the hood grants you a +2 resistance bonus on saving throws against inhaled poisons and other airborne attacks that require you to breathe them. Moistening the sponges with water is a standard action. The sponges dry out after 1d4 × 10 minutes and should be thoroughly rinsed after each use.
+Filter Hood																	TYPE:Goods.Tools.Headgear.Resizable													COST:10	WT:4					SOURCEPAGE:p.64																						BONUS:SKILL|Perception|-2																										SPROP:This snug leather hood has built-in goggles and a filtration tube containing sponges. A filter hood uses your helm slot and imposes a -2 penalty on hearing- and sight-based Perception checks. While the sponges are moist, the hood grants you a +2 resistance bonus on saving throws against inhaled poisons and other airborne attacks that require you to breathe them. Moistening the sponges with water is a standard action. The sponges dry out after 1d4 x 10 minutes and should be thoroughly rinsed after each use.
 Firewood (Per Day).MOD																																								SOURCEPAGE:p.64
 Fishhook.MOD																																									SOURCEPAGE:p.64
 Fishing Net (25 Sq Ft).MOD																																							SOURCEPAGE:p.64
@@ -656,7 +656,6 @@ Fishing Kit				TYPE:Goods.Tools.Kits	COST:0.5	WT:3		SOURCEPAGE:p.64
 Gambler's Kit (Common)		TYPE:Goods.Tools.Kits	COST:75	WT:5		SOURCEPAGE:p.65
 Gambler's Kit (Cheating)	TYPE:Goods.Tools.Kits	COST:300	WT:5		SOURCEPAGE:p.65	BONUS:SKILL|Profession (Gambler)|4|TYPE=Circumstance	SPROP:Grants a +4 circumstance bonus on Profession (gambler) checks when using these materials.
 Scrivener's Kit			TYPE:Goods.General	COST:2	WT:1		SOURCEPAGE:p.71
-
 
 ###Block: Alchemical Remedies
 # Equipment Name			Type						Cost		Weight	Source Page		Bonus to skill						Modify VAR						Special Property
@@ -885,6 +884,37 @@ Saddle (Exotic/Pack).MOD										SOURCEPAGE:p.85
 Saddle (Exotic/Riding).MOD										SOURCEPAGE:p.85
 Saddlebags.MOD												SOURCEPAGE:p.85
 Stabling (Per Day).MOD											SOURCEPAGE:p.86
+
+###Block:
+Kit	TYPE:Kit	COST:0	SPROP:To make full use of the kit, please use the EDIT > Add Kit. Search "KIT" and add the proper kit.
+
+# Copy Section
+Kit.COPY=Kit ~ barbarian's			
+Kit.COPY=Kit ~ bard's			
+Kit.COPY=Kit ~ campsite			
+Kit.COPY=Kit ~ cavalier's			
+Kit.COPY=Kit ~ chronicler's		
+Kit.COPY=Kit ~ cleric's			
+Kit.COPY=Kit ~ dragonslayer's		
+Kit.COPY=Kit ~ dungeoneering (common)	
+Kit.COPY=Kit ~ dungeoneering (deluxe)	
+Kit.COPY=Kit ~ fighter's kit		
+Kit.COPY=Kit ~ gunslinger's		
+Kit.COPY=Kit ~ inquisitor's		
+Kit.COPY=Kit ~ magus's			
+Kit.COPY=Kit ~ monk's			
+Kit.COPY=Kit ~ oracle's			
+Kit.COPY=Kit ~ paladin's			
+Kit.COPY=Kit ~ pathfinder's		
+Kit.COPY=Kit ~ ranger's			
+Kit.COPY=Kit ~ rogue's			
+Kit.COPY=Kit ~ sorcerer's			
+Kit.COPY=Kit ~ spelunking			
+Kit.COPY=Kit ~ summoner's			
+Kit.COPY=Kit ~ troll slayer's		
+Kit.COPY=Kit ~ undead slayer's		
+Kit.COPY=Kit ~ witch's			
+Kit.COPY=Kit ~ wizard's			
 
 #
 ###END
