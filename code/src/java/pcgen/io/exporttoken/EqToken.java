@@ -38,6 +38,8 @@ import pcgen.cdom.enumeration.IntegerKey;
 import pcgen.cdom.enumeration.MapKey;
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.cdom.enumeration.SourceFormat;
+import pcgen.cdom.inst.EquipmentHead;
+import pcgen.cdom.util.ControlUtilities;
 import pcgen.core.Equipment;
 import pcgen.core.EquipmentUtilities;
 import pcgen.core.Globals;
@@ -306,6 +308,89 @@ public class EqToken extends Token
 		return false;
 	}
 
+	public static Integer getRange(final PlayerCharacter pc, Equipment eq)
+	{
+		String rangeVar = pc.getControl("EQRANGE");
+		if (rangeVar != null)
+		{
+			//Need a special breakout based on PlayerCharacter reset of IntegerKey.RANGE
+			if (eq.isType("Both") && eq.isType("Melee"))
+			{
+				return Integer.valueOf(0);
+			}
+			return ((Number) eq.getLocalVariable(pc.getCharID(), rangeVar)).intValue();
+		}
+
+		int range = eq.getSafe(IntegerKey.RANGE);
+	
+		if (range == 0)
+		{
+			final String aRange = eq.getWeaponInfo("RANGE", true);
+	
+			if (aRange.length() != 0)
+			{
+				range = Integer.valueOf(aRange);
+			}
+		}
+	
+		int r = range + (int) eq.bonusTo(pc, "EQMWEAPON", "RANGEADD", true);
+		final int i = (int) eq.bonusTo(pc, "EQMWEAPON", "RANGEMULT", true);
+		double rangeMult = 1.0;
+	
+		if (i > 0)
+		{
+			rangeMult += (i - 1);
+		}
+	
+		int postAdd = 0;
+	
+		if (pc != null)
+		{
+			if (eq.isThrown())
+			{
+				r += (int) pc.getTotalBonusTo("RANGEADD", "THROWN");
+				postAdd = (int) pc.getTotalBonusTo("POSTRANGEADD", "THROWN");
+				rangeMult +=
+						((int) pc.getTotalBonusTo("RANGEMULT", "THROWN") / 100.0);
+			}
+			else if (eq.isProjectile())
+			{
+				r += (int) pc.getTotalBonusTo("RANGEADD", "PROJECTILE");
+				postAdd =
+						(int) pc.getTotalBonusTo("POSTRANGEADD", "PROJECTILE");
+				rangeMult +=
+						((int) pc.getTotalBonusTo("RANGEMULT", "PROJECTILE") / 100.0);
+			}
+		}
+	
+		r *= rangeMult;
+		r += postAdd;
+	
+		return r;
+	}
+
+	/**
+	 * Converts the critical multiplier into a dispalyable string, i.e.
+	 * blank for zero, - for negative and puts an x before positive
+	 * numbers e.g. x3
+	 *
+	 * @param mult The critical multiplier
+	 * @return     The string to display
+	 */
+	public static String multAsString(final int mult)
+	{
+		if (mult == 0)
+		{
+			return "";
+		}
+		else if (mult < 0)
+		{
+			return "-";
+		}
+	
+		return "x" + Integer.toString(mult);
+	}
+
 	/**
 	 * Get the AC Check Token
 	 * @param pc
@@ -357,7 +442,7 @@ public class EqToken extends Token
 	 */
 	public static String getAltCritMultToken(Equipment eq)
 	{
-		return eq.getAltCritMult();
+		return EqToken.multAsString(eq.getAltCritMultiplier());
 	}
 
 	/**
@@ -368,8 +453,20 @@ public class EqToken extends Token
 	 */
 	public static String getAltCritRangeToken(PlayerCharacter pc, Equipment eq)
 	{
-		int critRange = pc.getCritRange(eq, false);
-		return critRange == 0 ? "" : Integer.toString(critRange);
+		String critRangeVar =
+				ControlUtilities.getControlToken(Globals.getContext(),
+					"CRITRANGE");
+		if (critRangeVar == null)
+		{
+			int critRange = getOldBonusedCritRange(pc, eq, false);
+			return critRange == 0 ? "" : Integer.toString(critRange);
+		}
+		else
+		{
+			EquipmentHead head = eq.getEquipmentHead(2);
+			return WeaponToken.getCritRangeHead(pc, head, critRangeVar)
+				.toString();
+		}
 	}
 
 	/**
@@ -575,7 +672,7 @@ public class EqToken extends Token
 	 */
 	public static String getCritMultToken(Equipment eq)
 	{
-		return eq.getCritMult();
+		return EqToken.multAsString(eq.getCritMultiplier());
 	}
 
 	/**
@@ -586,8 +683,20 @@ public class EqToken extends Token
 	 */
 	public static String getCritRangeToken(PlayerCharacter pc, Equipment eq)
 	{
-		int critRange = pc.getCritRange(eq, true);
-		return critRange == 0 ? "" : Integer.toString(critRange);
+		String critRangeVar =
+				ControlUtilities.getControlToken(Globals.getContext(),
+					"CRITRANGE");
+		if (critRangeVar == null)
+		{
+			int critRange = getOldBonusedCritRange(pc, eq, true);
+			return critRange == 0 ? "" : Integer.toString(critRange);
+		}
+		else
+		{
+			EquipmentHead head = eq.getEquipmentHead(1);
+			return WeaponToken.getCritRangeHead(pc, head, critRangeVar)
+				.toString();
+		}
 	}
 
 	/**
@@ -631,7 +740,14 @@ public class EqToken extends Token
 	 */
 	public static int getEdrTokenInt(PlayerCharacter pc, Equipment eq)
 	{
-		return eq.eDR(pc).intValue();
+		String edrVar =
+				ControlUtilities.getControlToken(Globals.getContext(), "EDR");
+		if (edrVar == null)
+		{
+			return Math.max(0, eq.getSafe(IntegerKey.EDR)
+				+ (int) eq.bonusTo(pc, "EQMARMOR", "EDR", true));
+		}
+		return (Integer) eq.getLocalVariable(pc.getCharID(), edrVar);
 	}
 
 	/**
@@ -846,7 +962,7 @@ public class EqToken extends Token
 	public static String getRangeToken(Equipment eq, PlayerCharacter pc)
 	{
 		return Globals.getGameModeUnitSet().displayDistanceInUnitSet(
-			eq.getRange(pc).intValue())
+			getRange(pc, eq).intValue())
 			+ Globals.getGameModeUnitSet().getDistanceUnit();
 	}
 
@@ -867,7 +983,7 @@ public class EqToken extends Token
 	 */
 	public static String getSizeLongToken(Equipment eq)
 	{
-		return eq.getSafe(ObjectKey.SIZE).resolvesTo().getDisplayName();
+		return eq.getSafe(ObjectKey.SIZE).get().getDisplayName();
 	}
 
 	/**
@@ -1271,4 +1387,18 @@ public class EqToken extends Token
 
 		return merge;
 	}
+
+	public static int getOldBonusedCritRange(PlayerCharacter pc, Equipment e, boolean primary)
+	{
+		if (!primary && !e.isDouble())
+		{
+			return 0;
+		}
+		int raw = e.getRawCritRange(primary);
+		int add = (int) e.bonusTo(pc, "EQMWEAPON", "CRITRANGEADD", primary);
+		int dbl = 1 + (int) e.bonusTo(pc, "EQMWEAPON", "CRITRANGEDOUBLE", primary);
+		return raw * dbl + add;
+
+	}
+
 }

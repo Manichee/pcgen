@@ -65,6 +65,9 @@ public class IntegerKey
 
 	public static final IntegerKey CRIT_RANGE = getConstant("CRIT_RANGE");
 
+	/**
+	 * @deprecated due to EDR CodeControl
+	 */
 	public static final IntegerKey EDR = getConstant("EDR");
 
 	public static final IntegerKey HANDS = getConstant("HANDS", 1);
@@ -98,10 +101,11 @@ public class IntegerKey
 
 	public static final IntegerKey PLUS = getConstant("PLUS");
 
-	public static final IntegerKey PP_COST = getConstant("PP_COST");
-
 	public static final IntegerKey PROHIBIT_COST = getConstant("PROHIBIT_COST");
 
+	/**
+	 * @deprecated due to RANGE code control
+	 */
 	public static final IntegerKey RANGE = getConstant("RANGE");
 
 	public static final IntegerKey CAMPAIGN_RANK = getConstant("CAMPAIGN_RANK",

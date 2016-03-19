@@ -25,17 +25,18 @@
  */
 package plugin.exporttokens;
 
+import java.math.BigDecimal;
+import java.util.StringTokenizer;
+
 import pcgen.cdom.enumeration.FormulaKey;
 import pcgen.core.Equipment;
 import pcgen.core.Globals;
 import pcgen.core.PlayerCharacter;
 import pcgen.core.analysis.OutputNameFormatting;
 import pcgen.io.ExportHandler;
+import pcgen.io.exporttoken.EqToken;
 import pcgen.io.exporttoken.Token;
 import pcgen.util.BigDecimalHelper;
-
-import java.math.BigDecimal;
-import java.util.StringTokenizer;
 
 /**
  * Deals with Tokens below:
@@ -163,7 +164,7 @@ public class EqContainersToken extends Token
 			}
 			else if (property.equals("CRITRANGE"))
 			{
-				retString = getCritRangeToken(pc, eq);
+				retString = EqToken.getCritRangeToken(pc, eq);
 			}
 			else if (property.equals("DAMAGE"))
 			{
@@ -171,7 +172,7 @@ public class EqContainersToken extends Token
 			}
 			else if (property.equals("EDR"))
 			{
-				retString = Integer.toString(getEdrToken(pc, eq));
+				retString = Integer.toString(EqToken.getEdrTokenInt(pc, eq));
 			}
 			else if (property.equals("EQUIPPED"))
 			{
@@ -215,7 +216,7 @@ public class EqContainersToken extends Token
 			}
 			else if (property.equals("RANGE"))
 			{
-				retString = Integer.toString(getRangeToken(eq, pc));
+				retString = Integer.toString(EqToken.getRange(pc, eq).intValue());
 			}
 			else if (property.equals("SIZE"))
 			{
@@ -272,7 +273,7 @@ public class EqContainersToken extends Token
 	 */
 	public static String getAltCritToken(Equipment eq)
 	{
-		return eq.getAltCritMult();
+		return EqToken.getAltCritMultToken(eq);
 	}
 
 	/**
@@ -368,19 +369,7 @@ public class EqContainersToken extends Token
 	 */
 	public static String getCritMultToken(Equipment eq)
 	{
-		return eq.getCritMult();
-	}
-
-	/**
-	 * Get Critical Range Token
-	 * @param pc
-	 * @param eq
-	 * @return Critical Range Token
-	 */
-	public static String getCritRangeToken(PlayerCharacter pc, Equipment eq)
-	{
-		int critRange = pc.getCritRange(eq, true);
-		return critRange == 0 ? "" : Integer.toString(critRange);
+		return EqToken.getCritMultToken(eq);
 	}
 
 	/**
@@ -400,17 +389,6 @@ public class EqContainersToken extends Token
 		}
 
 		return retString;
-	}
-
-	/**
-	 * Get eDR Token
-	 * @param pc
-	 * @param eq
-	 * @return eDR Token
-	 */
-	public static int getEdrToken(PlayerCharacter pc, Equipment eq)
-	{
-		return eq.eDR(pc).intValue();
 	}
 
 	/**
@@ -508,17 +486,6 @@ public class EqContainersToken extends Token
 	public static double getQuantityToken(Equipment eq)
 	{
 		return eq.qty();
-	}
-
-	/**
-	 * Get Range Token
-	 * @param eq
-	 * @param pc
-	 * @return Range Token
-	 */
-	public static int getRangeToken(Equipment eq, PlayerCharacter pc)
-	{
-		return eq.getRange(pc).intValue();
 	}
 
 	/**
